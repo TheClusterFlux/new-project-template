@@ -7,11 +7,11 @@ read -p "Enter the service name (SERVICE_NAME): " SERVICE_NAME
 IMAGE_TAG=$(basename "$(pwd)")
 
 # Ask if an Ingress should be included
-read -p "Do you want to include an Ingress? (y/n): " INCLUDE_INGRESS
+read -p "Do you want to include an Ingress? (y/n): (Ingress exposes your service to the internet) " INCLUDE_INGRESS
 
 # If Ingress is included, prompt for the subdomain
 if [[ "$INCLUDE_INGRESS" == "y" ]]; then
-  read -p "Enter the subdomain for the Ingress (e.g., myapp): " SUBDOMAIN
+    read -p "Enter the subdomain for the Ingress (e.g., 'myapp' for myapp.theclusterflux.com): " SUBDOMAIN
 fi
 
 # Create the deployment YAML
@@ -81,4 +81,10 @@ spec:
 EOF
 fi
 
+
 echo "Deployment YAML file 'deployment.yaml' has been created."
+
+# Wait for user input before self-deletion
+read -n 1 -s -r -p "Press any key to continue..."
+
+rm -- "$0"

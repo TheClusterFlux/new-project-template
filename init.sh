@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Prompt for project-specific information
-read -p "Enter the service name (SERVICE_NAME): " SERVICE_NAME
+read -p "Enter the service name in kebab-case (e.g., 'my-service'): " SERVICE_NAME
 
 # Infer the image tag from the service name
 IMAGE_TAG=$(basename "$(pwd)")
@@ -11,7 +11,11 @@ read -p "Do you want to include an Ingress? (y/n): (Ingress exposes your service
 
 # If Ingress is included, prompt for the subdomain
 if [[ "$INCLUDE_INGRESS" == "y" ]]; then
-    read -p "Enter the subdomain for the Ingress (e.g., 'myapp' for myapp.theclusterflux.com): " SUBDOMAIN
+    read -p "Enter the subdomain for the Ingress. leave blank to use the service name (e.g., 'myapp' for myapp.theclusterflux.com): " SUBDOMAIN
+fi
+
+if [[ -z "$SUBDOMAIN" ]]; then
+    SUBDOMAIN=$SERVICE_NAME
 fi
 
 # Create the deployment YAML
